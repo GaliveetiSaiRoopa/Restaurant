@@ -6,4 +6,4 @@ const OrderFailure = () => {
   )
 }
 
-export default OrderFailure
+export default OrderFailure;
