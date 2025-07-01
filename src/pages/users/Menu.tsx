@@ -72,7 +72,7 @@ const Menu = () => {
                 src="/icons/Cart.svg"
                 alt="cartIcon"
                 className="w-8 h-8 cursor-pointer"
-                onClick={() => navigate("/checkout")}
+                onClick={() => navigate("/cart")}
               />
             </Badge>
           </div>
@@ -84,25 +84,25 @@ const Menu = () => {
                 </h1>
                 {items.map((item: any) => (
                   <div
-                    className="grid grid-cols-5 gap-3 items-center"
+                    className="grid grid-cols-5 md:gap-3 items-center"
                     key={item.id}
                   >
                     <p className="col-span-3">{item.name}</p>
                     <p className="col-span-1">{item.price}</p>
                     {getQuantity(item.id) === 0 ? (
                       <button
-                        className="col-span-1 bg-orange-500 rounded-xl py-1 px-8 text-sm w-[45px] font-medium flex justify-center"
+                        className="col-span-1 bg-orange-500 rounded-xl py-1 px-6 text-sm w-[45px] font-medium flex justify-center"
                         onClick={() => addToCart(item)}
                       >
                         Add
                       </button>
                     ) : (
-                      <div className="flex col-span-1 bg-orange-500 rounded-xl py-1 px-3 text-sm w-[95px] font-medium justify-between gap-4">
+                      <div className="flex col-span-1 bg-orange-500 rounded-xl py-1 px-3 text-sm w-[65px] font-medium justify-between gap-2 items-center">
                         <button onClick={() => increment(item.id)}>
                           <img
                             src="/icons/Add.svg"
                             alt="Minus"
-                            className="w-12 h-4"
+                            className="w-full h-4"
                           />
                         </button>
                         <p className="font-bold text-black">
@@ -112,7 +112,7 @@ const Menu = () => {
                           <img
                             src="/icons/Minus.svg"
                             alt="Minus"
-                            className="w-12 h-4"
+                            className="w-full h-4"
                           />
                         </button>
                       </div>
@@ -140,7 +140,7 @@ const Menu = () => {
             <button
               className=""
               onClick={() => {
-                navigate("/checkout");
+                navigate("/cart");
               }}
             >
               View Cart
