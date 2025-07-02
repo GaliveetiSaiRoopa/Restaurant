@@ -16,6 +16,7 @@ const PrimaryBtn: React.FC<Props> = ({
   width,
   icon,
   height,
+  bgColor,
 }: any) => {
   return (
     <div className={`${width}`}>
