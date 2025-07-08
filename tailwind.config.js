@@ -25,6 +25,11 @@ module.exports = {
         sans: ["Poppins", "sans-serif"],
         body: ["Open Sans", "sans-serif"],
       },
+      colors: {
+        primary: "#1e223d",
+        SpaceCadet: "#141C4C",
+        CalmWaters: "#F1F4F8",
+      },
     },
   },
   plugins: [],

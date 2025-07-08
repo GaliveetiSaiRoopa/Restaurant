@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryBtn from "../../components/common/PrimaryBtn";
 import {
   Paper,
@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import axios from "axios";
 
 const MenuManagement = () => {
   const menuItems: any = {
@@ -53,15 +54,31 @@ const MenuManagement = () => {
       { id: 229, name: "Watermelon Juice", price: 50 },
     ],
   };
+  const [menuData, setMenuData] = useState<any>([]);
+
+  const fetchData = () => {
+    axios
+      .get("http://localhost:3333/menus")
+      .then((response) => {
+        const data = response.data;
+        setMenuData(data);
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log(menuData, "MenuData");
   return (
-    <div className="p-6">
+    <div className="flex flex-col gap-4 p-6">
       <div className="flex gap-6 justify-end">
-        <PrimaryBtn label={"Add Category"} />
-        <PrimaryBtn label={"Add New Item"} />
+        <PrimaryBtn label={"Add Category"} bgColor={"#765996"} />
+        <PrimaryBtn label={"Add New Item"} bgColor={"#765996"} />
       </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="custom pagination table">
-          <TableHead sx={{ backgroundColor: "#000000" }}>
+          <TableHead sx={{ backgroundColor: "#765996" }}>
             <TableRow>
               <TableCell align="left" sx={{ color: "#FFFFFF" }}>
                 S.No.
@@ -78,19 +95,14 @@ const MenuManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(menuItems).map(([category, item]) => (
-              <TableRow
-                sx={{
-                  textAlign: "center",
-                }}
-              ></TableRow>
-            ))}
-
-            {/* {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
+            {menuData.map((item: any, index: number) => (
+              <TableRow>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{item?.category?.categoryName}</TableCell>
+                <TableCell>{item?.name}</TableCell>
+                <TableCell>{item.price}</TableCell>
               </TableRow>
-            )} */}
+            ))}
           </TableBody>
           {/* <TableFooter>
             <TableRow>

@@ -1,12 +1,13 @@
 import React from "react";
 
 interface Props {
-  label?: String;
+  label?: string;
   onClick?: () => void;
-  disabled?: Boolean;
+  disabled?: boolean;
   width?: any;
   height?: any;
   icon?: any;
+  bgColor?: any;
 }
 
 const PrimaryBtn: React.FC<Props> = ({
@@ -17,14 +18,17 @@ const PrimaryBtn: React.FC<Props> = ({
   icon,
   height,
   bgColor,
-}: any) => {
+}: Props) => {
   return (
     <div className={`${width}`}>
       <button
         onClick={onClick}
-        className={`bg-purple-500 text-white cursor-pointer w-full ${
+        className={`text-white cursor-pointer w-full ${
           height || "h-[42px]"
         } lg:px-5 px-4 flex items-center justify-center rounded-lg text-base font-medium`}
+        style={{
+          backgroundColor: bgColor || "#000000",
+        }}
       >
         {icon && <img width={20} height={20} src={icon} alt="icon" />}
         {label}
