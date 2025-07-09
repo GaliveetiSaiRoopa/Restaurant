@@ -9,10 +9,12 @@
 
 import router from '@adonisjs/core/services/router'
 const MenusController = () => import('../app/controllers/menus_controller.js')
-router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
-})
+// router.get('/', async () => {
+//   return {
+//     hello: 'world',
+//   }
+// })
 
 router.get('/menus', [MenusController, 'index'])
+router.post('/menus', [MenusController, 'store'])
+router.get('/categories', [MenusController, 'dropdown'])

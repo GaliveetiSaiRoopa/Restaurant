@@ -5,7 +5,7 @@ interface Props {
   label?: String;
   name: any;
   value?: any;
-  handleChange?: () => void;
+  handleChange?: any;
   options: any;
   bgColor?: string;
 }
@@ -35,7 +35,7 @@ const SelectInput: React.FC<Props> = ({
           name={name}
           onChange={handleChange}
           sx={{
-            textAlign: "center",
+            textAlign: "left",
             borderRadius: "8px",
             height:"50px",
             background: bgColor || "#FFFFFF",

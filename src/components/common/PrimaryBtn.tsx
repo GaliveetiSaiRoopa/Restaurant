@@ -24,13 +24,13 @@ const PrimaryBtn: React.FC<Props> = ({
       <button
         onClick={onClick}
         className={`text-white cursor-pointer w-full ${
-          height || "h-[42px]"
-        } lg:px-5 px-4 flex items-center justify-center rounded-lg text-base font-medium`}
+          height || "md:h-[42px] h-10"
+        } lg:px-5 md:px-4 px-2 flex items-center justify-center rounded-lg lg:text-base text-xs font-medium`}
         style={{
           backgroundColor: bgColor || "#000000",
         }}
       >
-        {icon && <img width={20} height={20} src={icon} alt="icon" />}
+        {/* {icon && <img width={20} height={20} src={icon} alt="icon" />} */}
         {label}
       </button>
     </div>

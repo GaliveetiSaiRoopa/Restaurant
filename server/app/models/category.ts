@@ -13,9 +13,9 @@ export default class Category extends BaseModel {
   @hasMany(() => Menu)
   declare menus: HasMany<typeof Menu>
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  // @column.dateTime({ autoCreate: true })
+  // declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  // @column.dateTime({ autoCreate: true, autoUpdate: true })
+  // declare updatedAt: DateTime
 }

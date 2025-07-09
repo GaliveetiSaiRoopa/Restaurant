@@ -6,10 +6,16 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
+  TablePaginationActions,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import axios from "axios";
+import AddMenuModal from "./modals/AddMenuModal";
+import AddCategoryModal from "./modals/AddCategoryModal";
 
 const MenuManagement = () => {
   const menuItems: any = {
@@ -55,6 +61,22 @@ const MenuManagement = () => {
     ],
   };
   const [menuData, setMenuData] = useState<any>([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (newPage: any) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const [mStates, setMStates] = useState({
+    category: { isOpen: false },
+    menu: { isOpen: false },
+  });
 
   const fetchData = () => {
     axios
@@ -65,69 +87,114 @@ const MenuManagement = () => {
       })
       .catch((err) => console.log(err));
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  console.log(menuData, "MenuData");
+  const handleOpen = (type: any) => {
+    const temp = { ...mStates } as any;
+    temp[type].isOpen = !temp[type].isOpen;
+    setMStates(temp);
+  };
+
+  const paginationModel = { page: 0, pageSize: 5 };
+
   return (
     <div className="flex flex-col gap-4 p-6">
-      <div className="flex gap-6 justify-end">
-        <PrimaryBtn label={"Add Category"} bgColor={"#765996"} />
-        <PrimaryBtn label={"Add New Item"} bgColor={"#765996"} />
+      <div className="flex gap-6 justify-between items-center">
+        <h1 className="font-semibold lg:text-xl text-[#765996]">
+          Menu Listing
+        </h1>
+        <div className="flex gap-6 ">
+          <PrimaryBtn
+            label={"Add Category"}
+            bgColor={"#765996"}
+            onClick={() => handleOpen("category")}
+            width={"w-fit"}
+          />
+          <PrimaryBtn
+            label={"Add Item"}
+            bgColor={"#765996"}
+            onClick={() => handleOpen("menu")}
+            width={"w-fit"}
+          />
+        </div>
       </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="custom pagination table">
-          <TableHead sx={{ backgroundColor: "#765996" }}>
-            <TableRow>
-              <TableCell align="left" sx={{ color: "#FFFFFF" }}>
-                S.No.
-              </TableCell>
-              <TableCell align="left" sx={{ color: "#FFFFFF" }}>
-                Category
-              </TableCell>
-              <TableCell align="left" sx={{ color: "#FFFFFF" }}>
-                Item Name
-              </TableCell>
-              <TableCell align="left" sx={{ color: "#FFFFFF" }}>
-                Price
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {menuData.map((item: any, index: number) => (
+
+      <Paper sx={{ width: "100%" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table sx={{ minWidth: 700 }} aria-label="custom pagination table">
+            <TableHead sx={{ backgroundColor: "#765996" }}>
               <TableRow>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{item?.category?.categoryName}</TableCell>
-                <TableCell>{item?.name}</TableCell>
-                <TableCell>{item.price}</TableCell>
+                <TableCell align="left" sx={{ color: "#FFFFFF" }}>
+                  S.No.
+                </TableCell>
+                <TableCell align="left" sx={{ color: "#FFFFFF" }}>
+                  Category
+                </TableCell>
+                <TableCell align="left" sx={{ color: "#FFFFFF" }}>
+                  Item Name
+                </TableCell>
+                <TableCell align="left" sx={{ color: "#FFFFFF" }}>
+                  Price
+                </TableCell>
+                <TableCell align="left" sx={{ color: "#FFFFFF" }}>
+                  Action
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-          {/* <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={3}
-                count={ordersData.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                slotProps={{
-                  select: {
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  },
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter> */}
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {menuData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((item: any, index: number) => (
+                  <TableRow>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item?.category?.categoryName}</TableCell>
+                    <TableCell>{item?.name}</TableCell>
+                    <TableCell>{item.price}</TableCell>
+                    <TableCell
+                      sx={{
+                        display: "flex",
+                        gap:"6px",
+                        alignItems:"center"
+                      }}
+                    >
+                      <Tooltip title="Edit" placement="top">
+                        <img src="/icons/Edit.svg" />
+                      </Tooltip>
+                      <Tooltip title="Delete" placement="top">
+                        <img src="/icons/Delete.svg" />
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 100]}
+          component="div"
+          count={menuData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+
+      {mStates.menu.isOpen && (
+        <AddMenuModal
+          open={mStates.menu.isOpen}
+          handleClose={() => handleOpen("menu")}
+        />
+      )}
+      {mStates.category.isOpen && (
+        <AddCategoryModal
+          open={mStates.category.isOpen}
+          handleClose={() => handleOpen("category")}
+        />
+      )}
     </div>
   );
 };
