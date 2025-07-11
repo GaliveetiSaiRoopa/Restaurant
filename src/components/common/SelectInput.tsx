@@ -8,6 +8,7 @@ interface Props {
   handleChange?: any;
   options: any;
   bgColor?: string;
+  height?: any;
 }
 
 const SelectInput: React.FC<Props> = ({
@@ -17,13 +18,18 @@ const SelectInput: React.FC<Props> = ({
   name,
   handleChange,
   bgColor,
+  height,
 }) => {
   return (
     <Box sx={{ minWidth: 180, textAlign: "center" }}>
       <FormControl fullWidth>
         <InputLabel
           id="select-label"
-          sx={{ fontSize: "16px", color: "#000000" }}
+          sx={{
+            fontSize: "16px",
+            color: "#000000",
+            textAlign: "center",
+          }}
         >
           {label}
         </InputLabel>
@@ -37,7 +43,7 @@ const SelectInput: React.FC<Props> = ({
           sx={{
             textAlign: "left",
             borderRadius: "8px",
-            height:"50px",
+            height: height || "50px",
             background: bgColor || "#FFFFFF",
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "#000000",
@@ -47,7 +53,7 @@ const SelectInput: React.FC<Props> = ({
         >
           {options.length > 0 ? (
             options.map((item: any) => (
-              <MenuItem value={item?.id || item?.name}>{item?.name}</MenuItem>
+              <MenuItem value={item?.name || item?.id}>{item?.name}</MenuItem>
             ))
           ) : (
             <p>No data found...</p>

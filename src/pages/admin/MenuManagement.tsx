@@ -16,7 +16,12 @@ import {
 import axios from "axios";
 import AddMenuModal from "./modals/AddMenuModal";
 import AddCategoryModal from "./modals/AddCategoryModal";
+import SelectInput from "../../components/common/SelectInput";
+import EditMenuItem from "./modals/EditMenuItem";
 
+const initial_fields = {
+  category: "",
+};
 const MenuManagement = () => {
   const menuItems: any = {
     Starters: [
@@ -63,8 +68,15 @@ const MenuManagement = () => {
   const [menuData, setMenuData] = useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [showFilters, setShowFilters] = useState(false);
+  const [categoryList, setCategoryList] = useState([]);
+  const [params, setParams] = useState(initial_fields);
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setParams((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleChangePage = (newPage: any) => {
+  const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
 
@@ -76,11 +88,20 @@ const MenuManagement = () => {
   const [mStates, setMStates] = useState({
     category: { isOpen: false },
     menu: { isOpen: false },
+    edit_menu: { isOpen: false, data: {} },
   });
 
-  const fetchData = () => {
+  const handleDeleteMenu = (id: number) => {
     axios
-      .get("http://localhost:3333/menus")
+      .delete(`http://localhost:3333/menus/${id}`)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+
+    fetchData(params);
+  };
+  const fetchData = async (params: any) => {
+    await axios
+      .get(`http://localhost:3333/menus?category=${params?.category}`)
       .then((response) => {
         const data = response.data;
         setMenuData(data);
@@ -88,17 +109,41 @@ const MenuManagement = () => {
       .catch((err) => console.log(err));
   };
 
+  const fetchCategories = async () => {
+    await axios
+      .get("http://localhost:3333/categories")
+      .then((response) => {
+        const data = response.data;
+        const catList = data?.map((item: any) => ({
+          id: item?.id,
+          name: item?.categoryName,
+        }));
+        setCategoryList(catList);
+        console.log(data, "checkData");
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
-    fetchData();
+    fetchData(params);
+    fetchCategories();
   }, []);
 
   const handleOpen = (type: any) => {
     const temp = { ...mStates } as any;
     temp[type].isOpen = !temp[type].isOpen;
+    if (type === "edit_menu") {
+      temp[type].data = {};
+    }
     setMStates(temp);
   };
 
-  const paginationModel = { page: 0, pageSize: 5 };
+  const handleEdit = (item: any, type: any) => {
+    const temp = { ...mStates } as any;
+    temp[type].isOpen = !temp[type].isOpen;
+    temp[type].data = item;
+    setMStates(temp);
+  };
 
   return (
     <div className="flex flex-col gap-4 p-6">
@@ -106,7 +151,15 @@ const MenuManagement = () => {
         <h1 className="font-semibold lg:text-xl text-[#765996]">
           Menu Listing
         </h1>
-        <div className="flex gap-6 ">
+        <div className="flex gap-6">
+          <button onClick={() => setShowFilters(!showFilters)}>
+            <img
+              src="/icons/Filter.svg"
+              className={`border border-[#765996] p-3 rounded-lg sm:w-10 sm:h-10 ${
+                showFilters ? "bg-[#7f6699]" : ""
+              }`}
+            />
+          </button>
           <PrimaryBtn
             label={"Add Category"}
             bgColor={"#765996"}
@@ -114,13 +167,40 @@ const MenuManagement = () => {
             width={"w-fit"}
           />
           <PrimaryBtn
-            label={"Add Item"}
+            label={"Add Item(s)"}
             bgColor={"#765996"}
             onClick={() => handleOpen("menu")}
             width={"w-fit"}
           />
         </div>
       </div>
+
+      {showFilters && (
+        <div className="flex flex-wrap gap-4">
+          <div className="w-[250px]">
+            <SelectInput
+              label={"Category"}
+              name="category"
+              value={params?.category}
+              handleChange={handleChange}
+              options={categoryList}
+              height={"45px"}
+            />
+          </div>
+          <PrimaryBtn
+            label="Clear All"
+            width={"w-fit"}
+            bgColor={"#765996"}
+            onClick={() => setParams(initial_fields)}
+          />
+          <PrimaryBtn
+            label="Search"
+            width={"w-fit"}
+            bgColor={"#765996"}
+            onClick={() => fetchData(params)}
+          />
+        </div>
+      )}
 
       <Paper sx={{ width: "100%" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -156,15 +236,23 @@ const MenuManagement = () => {
                     <TableCell
                       sx={{
                         display: "flex",
-                        gap:"6px",
-                        alignItems:"center"
+                        gap: "6px",
+                        alignItems: "center",
                       }}
                     >
                       <Tooltip title="Edit" placement="top">
-                        <img src="/icons/Edit.svg" />
+                        <img
+                          src="/icons/Edit.svg"
+                          onClick={() => handleEdit(item, "edit_menu")}
+                          className="cursor-pointer"
+                        />
                       </Tooltip>
                       <Tooltip title="Delete" placement="top">
-                        <img src="/icons/Delete.svg" />
+                        <img
+                          src="/icons/Delete.svg"
+                          onClick={() => handleDeleteMenu(item.id)}
+                          className="cursor-pointer"
+                        />
                       </Tooltip>
                     </TableCell>
                   </TableRow>
@@ -187,12 +275,21 @@ const MenuManagement = () => {
         <AddMenuModal
           open={mStates.menu.isOpen}
           handleClose={() => handleOpen("menu")}
+          categoryList={categoryList}
         />
       )}
       {mStates.category.isOpen && (
         <AddCategoryModal
           open={mStates.category.isOpen}
           handleClose={() => handleOpen("category")}
+        />
+      )}
+      {mStates.edit_menu.isOpen && (
+        <EditMenuItem
+          open={mStates.edit_menu.isOpen}
+          data={mStates.edit_menu.data}
+          handleClose={() => handleOpen("edit_menu")}
+          categoryList={categoryList}
         />
       )}
     </div>

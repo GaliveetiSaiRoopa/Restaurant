@@ -13,15 +13,12 @@ const style = {
 
 const initial_fields = {
   category: "",
-  item: "",
-  price: "",
 };
 
 type ItemType = { item: string; price: number };
 const AddCategoryModal = ({ open, handleClose }: any) => {
   const [params, setParams] = useState(initial_fields);
   const [itemsList, setItemsList] = useState<ItemType[]>([]);
-  const [categoryList, setCategoryList] = useState<any>([]);
   const onCloseClick = () => {
     handleClose();
   };
@@ -30,19 +27,6 @@ const AddCategoryModal = ({ open, handleClose }: any) => {
     const { name, value } = e.target;
     setParams((prev) => ({ ...prev, [name]: value }));
   };
-
-  const fetchData = () => {
-    axios
-      .get("http://localhost:3333/categories")
-      .then((response) => {
-        const data = response.data;
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleAddItems = () => {
     const temp = { item: "", price: 0 };
@@ -69,9 +53,21 @@ const AddCategoryModal = ({ open, handleClose }: any) => {
     const newList = temp.filter((item, ind) => ind !== index);
     setItemsList(newList);
   };
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    const payload = {
+      category_name: params?.category,
+      itemsList: itemsList.length > 0 ? [...itemsList] : {},
+    };
 
-  console.log(itemsList, "ItemsList");
+    axios
+      .post("http://localhost:3333/categories", payload)
+      .then((response) => {
+        console.log(response);
+        onCloseClick();
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="">
       <Modal

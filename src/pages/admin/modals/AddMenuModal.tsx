@@ -12,15 +12,12 @@ const style = {
 };
 
 const initial_states = {
-  menu: "",
   category: "",
-  price: "",
 };
 
 type ItemType = { item: string; price: number };
-const AddMenuModal = ({ open, handleClose }: any) => {
+const AddMenuModal = ({ open, handleClose, categoryList }: any) => {
   const [params, setParams] = useState(initial_states);
-  const [categoryList, setCategoryList] = useState([]);
   const [itemsList, setItemsList] = useState<ItemType[]>([
     { item: "", price: 0 },
   ]);
@@ -34,7 +31,10 @@ const AddMenuModal = ({ open, handleClose }: any) => {
     };
     axios
       .post("http://localhost:3333/menus", payload)
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log(response);
+        onCloseClick();
+      })
       .catch((err) => console.log(err));
   };
   const handleChange = (e: any) => {
@@ -68,20 +68,6 @@ const AddMenuModal = ({ open, handleClose }: any) => {
     setItemsList(newList);
   };
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3333/categories")
-      .then((response) => {
-        const data = response.data;
-        const catList = data?.map((item: any) => ({
-          id: item?.id,
-          name: item?.categoryName,
-        }));
-        setCategoryList(catList);
-        console.log(data, "checkData");
-      })
-      .catch((err) => console.log(err));
-  }, []);
   return (
     <div className="">
       <Modal
