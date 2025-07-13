@@ -6,17 +6,15 @@ const Menu = React.lazy(() => import("../pages/users/Menu"));
 
 const Layout = () => {
   return (
-    <div>
-      <Routes>
-        {/* {admin} */}
+    <Routes>
+      {/* {admin} */}
 
-        {/* {users} */}
-        <>
-          <Route path="/" element={<Home />} />
-          <Route path="/menus" element={<Menu />} />
-        </>
-      </Routes>
-    </div>
+      {/* {users} */}
+      <>
+        <Route path="/" element={<Home />} />
+        <Route path="/menus" element={<Menu />} />
+      </>
+    </Routes>
   );
 };
 

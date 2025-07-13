@@ -56,7 +56,6 @@ const Menu = () => {
     categories: string
   ) => {
     const qty = quantity + 1;
-    // const orders = [...orderDetails];
     const findId = orderDetails.findIndex((item: any) => item.id === id);
     if (findId !== -1) {
       const orders = [...orderDetails];
@@ -77,13 +76,41 @@ const Menu = () => {
     setMenuItemsState(obj);
   };
 
+  const handleDelete = (
+    id: number,
+    name: string,
+    price: string,
+    quantity: number,
+    categories: string
+  ) => {
+    const qty = quantity - 1;
+    if (qty === 0) {
+      const orders = orderDetails.filter((item: any) => item.id !== id);
+      setOrderDetails(orders);
+    } else {
+      const orders = [...orderDetails];
+      const findID = orders.findIndex((item: any) => item.id === id);
+      orders[findID].quantity = qty;
+      setOrderDetails(orders);
+    }
+
+    const obj = {
+      ...menuItemsState,
+      [categories]: menuItemsState[categories].map((item: any) =>
+        item.id === id ? { ...item, quantity: qty } : item
+      ),
+    };
+
+    setMenuItemsState(obj);
+  };
+
   console.log(orderDetails, "OrderDetails");
 
   return (
     <div className="w-full min-h-screen">
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center p-8 lg:w-[680px] w-full gap-8 bg-black text-white">
-          <h1 className="text-3xl font-cursive text-orange-300">Hotal Name</h1>
+          <h1 className="text-3xl font-cursive text-orange-300">Hotel Name</h1>
           <div className="flex justify-between gap-8 w-full">
             <h1 className="text-2xl font-cursive text-orange-300">Menu</h1>
             <Badge
@@ -125,22 +152,46 @@ const Menu = () => {
                         Add
                       </button>
                     ) : (
-                      <div className="flex col-span-1 bg-orange-500 rounded-xl py-1 px-8 text-sm w-[35px] font-medium justify-between">
-                        <button
-                          onClick={() =>
-                            handleOrders(
-                              item.id,
-                              item.name,
-                              item.price,
-                              item.quantity,
-                              categories
-                            )
-                          }
-                        >
-                          A
-                        </button>
-                        <p>{item.quantity}</p>
-                        <button>D</button>
+                      <div className="col-span-1 bg-orange-500 rounded-xl py-1 px-2 text-sm w-[85px] font-medium">
+                        <div className="flex justify-between gap-3 items-center">
+                          <button
+                            onClick={() =>
+                              handleOrders(
+                                item.id,
+                                item.name,
+                                item.price,
+                                item.quantity,
+                                categories
+                              )
+                            }
+                          >
+                            <img
+                              src="/icons/Add.svg"
+                              alt="A"
+                              className="w-12 h-4"
+                            />
+                          </button>
+                          <p className="font-bold text-black">
+                            {item.quantity}
+                          </p>
+                          <button
+                            onClick={() =>
+                              handleDelete(
+                                item.id,
+                                item.name,
+                                item.price,
+                                item.quantity,
+                                categories
+                              )
+                            }
+                          >
+                            <img
+                              src="/icons/Minus.svg"
+                              alt="D"
+                              className="w-12 h-4"
+                            />
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
