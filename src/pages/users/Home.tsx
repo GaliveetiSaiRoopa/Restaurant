@@ -27,6 +27,7 @@ const Home = () => {
               navigate("/menus");
             }}
             width={"w-48"}
+            bgColor="#9C27B0"
           />
         </div>
       </div>
