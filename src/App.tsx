@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Layout } from "./layout/Layout";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       }
     >
       <Layout />
+      <ToastContainer />
     </Suspense>
   );
 }

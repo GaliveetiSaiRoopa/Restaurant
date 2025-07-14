@@ -15,7 +15,7 @@ export default class MenusController {
     return response.ok(menus)
   }
 
-  public async dropdown({ request }: HttpContext) {
+  public async dropdown() {
     const categories = await Category.query()
     return categories
   }

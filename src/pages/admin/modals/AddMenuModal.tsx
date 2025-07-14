@@ -16,7 +16,7 @@ const initial_states = {
 };
 
 type ItemType = { item: string; price: number };
-const AddMenuModal = ({ open, handleClose, categoryList }: any) => {
+const AddMenuModal = ({ open, handleClose, categoryList, fetchData }: any) => {
   const [params, setParams] = useState(initial_states);
   const [itemsList, setItemsList] = useState<ItemType[]>([
     { item: "", price: 0 },
@@ -33,6 +33,7 @@ const AddMenuModal = ({ open, handleClose, categoryList }: any) => {
       .post("http://localhost:3333/menus", payload)
       .then((response) => {
         console.log(response);
+        fetchData();
         onCloseClick();
       })
       .catch((err) => console.log(err));

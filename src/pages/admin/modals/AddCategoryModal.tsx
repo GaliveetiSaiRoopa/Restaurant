@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../../../components/common/Input";
 import PrimaryBtn from "../../../components/common/PrimaryBtn";
 import axios from "axios";
+import { showToastMessage } from "../../../utils/helper";
 
 const style = {
   position: "absolute",
@@ -16,7 +17,7 @@ const initial_fields = {
 };
 
 type ItemType = { item: string; price: number };
-const AddCategoryModal = ({ open, handleClose }: any) => {
+const AddCategoryModal = ({ open, handleClose, fetchData }: any) => {
   const [params, setParams] = useState(initial_fields);
   const [itemsList, setItemsList] = useState<ItemType[]>([]);
   const onCloseClick = () => {
@@ -56,13 +57,15 @@ const AddCategoryModal = ({ open, handleClose }: any) => {
   const handleSubmit = () => {
     const payload = {
       category_name: params?.category,
-      itemsList: itemsList.length > 0 ? [...itemsList] : {},
+      itemslist: itemsList.length > 0 ? [...itemsList] : {},
     };
 
     axios
       .post("http://localhost:3333/categories", payload)
       .then((response) => {
-        console.log(response);
+        console.log(response, "Checkresponse");
+        // showToastMessage(response, "success");
+        fetchData();
         onCloseClick();
       })
       .catch((err) => console.log(err));

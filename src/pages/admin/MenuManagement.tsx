@@ -18,6 +18,7 @@ import AddMenuModal from "./modals/AddMenuModal";
 import AddCategoryModal from "./modals/AddCategoryModal";
 import SelectInput from "../../components/common/SelectInput";
 import EditMenuItem from "./modals/EditMenuItem";
+import { showToastMessage } from "../../utils/helper";
 
 const initial_fields = {
   category: "",
@@ -71,6 +72,7 @@ const MenuManagement = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [params, setParams] = useState(initial_fields);
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setParams((prev) => ({ ...prev, [name]: value }));
@@ -94,14 +96,20 @@ const MenuManagement = () => {
   const handleDeleteMenu = (id: number) => {
     axios
       .delete(`http://localhost:3333/menus/${id}`)
-      .then((response) => console.log(response))
+      .then((response) => {
+        const data = response.data;
+        console.log(response, data?.message, "deleteItemCheck");
+        showToastMessage(data?.message, "success");
+        fetchData(params);
+      })
       .catch((err) => console.log(err));
 
     fetchData(params);
   };
   const fetchData = async (params: any) => {
+    const cat = params?.category ?? "";
     await axios
-      .get(`http://localhost:3333/menus?category=${params?.category}`)
+      .get(`http://localhost:3333/menus?category=${cat}`)
       .then((response) => {
         const data = response.data;
         setMenuData(data);
@@ -276,12 +284,14 @@ const MenuManagement = () => {
           open={mStates.menu.isOpen}
           handleClose={() => handleOpen("menu")}
           categoryList={categoryList}
+          fetchData={() => fetchData(params)}
         />
       )}
       {mStates.category.isOpen && (
         <AddCategoryModal
           open={mStates.category.isOpen}
           handleClose={() => handleOpen("category")}
+          fetchData={() => fetchData(params)}
         />
       )}
       {mStates.edit_menu.isOpen && (
