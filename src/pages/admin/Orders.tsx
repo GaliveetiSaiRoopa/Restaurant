@@ -60,7 +60,10 @@ const Orders = () => {
     setPage(0);
   };
 
-  const handleChange = () => {};
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setParams((prev) => ({ ...prev, [name]: value }));
+  };
   return (
     <div className="flex flex-col gap-6 p-8">
       <h1 className="font-bold text-2xl">Order Details</h1>
@@ -75,7 +78,7 @@ const Orders = () => {
             { id: 5, name: "5" },
           ]}
           value={params?.table_no}
-          handleChange={() => handleChange()}
+          handleChange={handleChange}
           bgColor={"#E5E7EB"}
           label={"Table No"}
         />
@@ -89,7 +92,7 @@ const Orders = () => {
             { id: 5, name: "5" },
           ]}
           value={params?.order_id}
-          handleChange={() => handleChange()}
+          handleChange={handleChange}
           bgColor={"#E5E7EB"}
           label={"Order ID"}
         />
@@ -100,7 +103,7 @@ const Orders = () => {
             { id: "Delivered", name: "Delivered" },
           ]}
           value={params?.status}
-          handleChange={() => handleChange()}
+          handleChange={handleChange}
           bgColor={"#E5E7EB"}
           label={"Status"}
         />

@@ -1,5 +1,4 @@
 import { Badge } from "@mui/material";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 
@@ -48,7 +47,6 @@ const menuItems: any = {
 
 const Menu = () => {
   const { cart, addToCart, increment, decrement, getQuantity } = useCartStore();
-  const [orderDetails, setOrderDetails] = useState<any>([]);
   const navigate = useNavigate();
   console.log(cart, "Cart");
   return (

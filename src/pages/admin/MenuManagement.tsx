@@ -6,10 +6,8 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TableHead,
   TablePagination,
-  TablePaginationActions,
   TableRow,
   Tooltip,
 } from "@mui/material";
@@ -23,49 +21,49 @@ import { showToastMessage } from "../../utils/helper";
 const initial_fields = {
   category: "",
 };
+const menuItems: any = {
+  Starters: [
+    { id: 200, name: "Samosa", price: 50 },
+    { id: 201, name: "Baby Corn", price: 100 },
+    { id: 202, name: "Gobi Manchurian", price: 110 },
+    { id: 203, name: "Mushroom Manchurian", price: 120 },
+    { id: 204, name: "Chilli Gobi", price: 150 },
+    { id: 205, name: "Chilli Mushroom", price: 180 },
+    { id: 206, name: "Chilli Panner", price: 200 },
+  ],
+  "Main Course": [
+    { id: 207, name: "Veg Curry", price: 100 },
+    { id: 208, name: "Matar Panner", price: 120 },
+    { id: 209, name: "kadai Panner", price: 120 },
+    { id: 210, name: "Aloo Mushroom", price: 150 },
+    { id: 211, name: "Dal Tadka", price: 160 },
+    { id: 212, name: "Dal Makhani", price: 169 },
+  ],
+  Rices: [
+    { id: 213, name: "Plain Rice", price: 70 },
+    { id: 214, name: "Jeera Rice", price: 100 },
+    { id: 215, name: "Pulihora", price: 120 },
+    { id: 216, name: "Mushroom Rice", price: 130 },
+    { id: 217, name: "Veg Fried Rice", price: 130 },
+    { id: 218, name: "Panner Rice", price: 140 },
+  ],
+  Shakes: [
+    { id: 219, name: "Banana Shake", price: 60 },
+    { id: 220, name: "Apple Shake", price: 70 },
+    { id: 221, name: "Mango Shake", price: 70 },
+    { id: 222, name: "vanilla Shake", price: 80 },
+    { id: 223, name: "Oreo Shake", price: 80 },
+    { id: 224, name: "Butterscotch Shake", price: 90 },
+    { id: 225, name: "Kiwi Shake", price: 100 },
+    { id: 226, name: "Dry Fruits Shake", price: 120 },
+  ],
+  Juices: [
+    { id: 227, name: "Lemonaid", price: 40 },
+    { id: 228, name: "Butter Milk", price: 40 },
+    { id: 229, name: "Watermelon Juice", price: 50 },
+  ],
+};
 const MenuManagement = () => {
-  const menuItems: any = {
-    Starters: [
-      { id: 200, name: "Samosa", price: 50 },
-      { id: 201, name: "Baby Corn", price: 100 },
-      { id: 202, name: "Gobi Manchurian", price: 110 },
-      { id: 203, name: "Mushroom Manchurian", price: 120 },
-      { id: 204, name: "Chilli Gobi", price: 150 },
-      { id: 205, name: "Chilli Mushroom", price: 180 },
-      { id: 206, name: "Chilli Panner", price: 200 },
-    ],
-    "Main Course": [
-      { id: 207, name: "Veg Curry", price: 100 },
-      { id: 208, name: "Matar Panner", price: 120 },
-      { id: 209, name: "kadai Panner", price: 120 },
-      { id: 210, name: "Aloo Mushroom", price: 150 },
-      { id: 211, name: "Dal Tadka", price: 160 },
-      { id: 212, name: "Dal Makhani", price: 169 },
-    ],
-    Rices: [
-      { id: 213, name: "Plain Rice", price: 70 },
-      { id: 214, name: "Jeera Rice", price: 100 },
-      { id: 215, name: "Pulihora", price: 120 },
-      { id: 216, name: "Mushroom Rice", price: 130 },
-      { id: 217, name: "Veg Fried Rice", price: 130 },
-      { id: 218, name: "Panner Rice", price: 140 },
-    ],
-    Shakes: [
-      { id: 219, name: "Banana Shake", price: 60 },
-      { id: 220, name: "Apple Shake", price: 70 },
-      { id: 221, name: "Mango Shake", price: 70 },
-      { id: 222, name: "vanilla Shake", price: 80 },
-      { id: 223, name: "Oreo Shake", price: 80 },
-      { id: 224, name: "Butterscotch Shake", price: 90 },
-      { id: 225, name: "Kiwi Shake", price: 100 },
-      { id: 226, name: "Dry Fruits Shake", price: 120 },
-    ],
-    Juices: [
-      { id: 227, name: "Lemonaid", price: 40 },
-      { id: 228, name: "Butter Milk", price: 40 },
-      { id: 229, name: "Watermelon Juice", price: 50 },
-    ],
-  };
   const [menuData, setMenuData] = useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -166,6 +164,7 @@ const MenuManagement = () => {
               className={`border border-[#765996] p-3 rounded-lg sm:w-10 sm:h-10 ${
                 showFilters ? "bg-[#7f6699]" : ""
               }`}
+              alt="filter"
             />
           </button>
           <PrimaryBtn
@@ -253,6 +252,7 @@ const MenuManagement = () => {
                           src="/icons/Edit.svg"
                           onClick={() => handleEdit(item, "edit_menu")}
                           className="cursor-pointer"
+                          alt="edit"
                         />
                       </Tooltip>
                       <Tooltip title="Delete" placement="top">
@@ -260,6 +260,7 @@ const MenuManagement = () => {
                           src="/icons/Delete.svg"
                           onClick={() => handleDeleteMenu(item.id)}
                           className="cursor-pointer"
+                          alt="delete"
                         />
                       </Tooltip>
                     </TableCell>

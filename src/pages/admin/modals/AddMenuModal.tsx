@@ -1,5 +1,5 @@
 import { Backdrop, Box, Modal } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Input from "../../../components/common/Input";
 import PrimaryBtn from "../../../components/common/PrimaryBtn";
 import SelectInput from "../../../components/common/SelectInput";

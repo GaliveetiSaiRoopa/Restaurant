@@ -1,12 +1,5 @@
-import { Checkbox } from "@mui/material";
 import React, { useRef, useState } from "react";
-import {
-  Link,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 
 const Home = React.lazy(() => import("../pages/users/Home"));
 const Menu = React.lazy(() => import("../pages/users/Menu"));
@@ -22,7 +15,6 @@ const SideBarLayout = ({ children }: any) => {
   const [menuIndex, setOpenMenuIndex] = useState(1);
   const [showUserInfo, setShowUserInfo] = useState(false);
   const wrapperInfoRef = useRef(null);
-  const navigate = useNavigate();
   const logout = () => {};
   const toogleUserInfo = () => {};
   let user: any = {

@@ -1,5 +1,5 @@
 import { Backdrop, Box, Modal } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Input from "../../../components/common/Input";
 import PrimaryBtn from "../../../components/common/PrimaryBtn";
 import axios from "axios";
@@ -63,7 +63,8 @@ const AddCategoryModal = ({ open, handleClose, fetchData }: any) => {
     axios
       .post("http://localhost:3333/categories", payload)
       .then((response) => {
-        console.log(response, "Checkresponse");
+        const data = response.data;
+        console.log(data, "Checkresponse");
         // showToastMessage(response, "success");
         fetchData();
         onCloseClick();
